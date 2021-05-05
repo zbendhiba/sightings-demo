@@ -8,22 +8,20 @@ import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.core.Response;
 
-import org.apache.camel.ProducerTemplate;
+import org.apache.camel.ConsumerTemplate;
 
 @ApplicationScoped
 @Path("twitter")
 public class TwitterResource {
 
     @Inject
-    ProducerTemplate producerTemplate;
+    ConsumerTemplate consumerTemplate;
 
     @GET
     @Path("search/{keywords}")
-    public String search(@PathParam("keywords") String keywords){
-        Map<String, Object> headers = new HashMap<>();
-        producerTemplate.requestBodyAndHeaders("twitter:search", keywords, headers);
-        return "Search keywords " + keywords;
+    public String search(@PathParam("keywords") String keywords) {
+        final String tweets = consumerTemplate.receiveBodyNoWait("twitter-search://" + keywords + "?count=3", String.class);
+        return "Search keywords " + tweets;
     }
 }
