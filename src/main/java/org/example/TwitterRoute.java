@@ -12,10 +12,10 @@ public class TwitterRoute extends RouteBuilder {
 
         // example of Routes that need the class Account to be registred for reflection
         from("twitter-search://@Apachecamel")
-               /* .setBody()
+                .setBody()
                 .simple("{\"sigthning\": \"${body}\", \"where\": \"twitter\"}")
-                .marshal().json()*/
-                .log("${body}");
-                //.to("kafka:camelsightings");
+                .marshal().json()
+                .log("${body}")
+                .to("kafka:camelsightings");
     }
 }
